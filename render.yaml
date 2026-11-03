@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: noodle-box-beta
+    runtime: docker
+    plan: starter
+    healthCheckPath: /health
+    autoDeploy: true
+    disk:
+      name: noodle-box-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: DATABASE_PATH
+        value: /var/data/noodlebox.db
+      - key: QUESTIONNAIRE_URL
+        sync: false
+      - key: PUBLIC_BASE_URL
+        sync: false
+      - key: ADMIN_PASSWORD
+        generateValue: true
+      - key: LOCATION_CODES
+        value: LOC-UNI-01,LOC-APT-02
+      - key: DEFAULT_LOCATION_CODE
+        value: LOC-UNI-01

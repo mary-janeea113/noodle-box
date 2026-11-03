@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Receipt {{ transaction.order_code }} · Noodle Box{% endblock %}
+{% block body %}
+<main class="receipt stack">
+  <section class="card">
+    <p class="pill">{{ transaction.transaction_type|replace('_',' ')|upper }} · TEST MODE</p>
+    <h1>All sorted.</h1>
+    <p>Receipt <strong>{{ transaction.order_code }}</strong> · {{ transaction.location_code }}</p>
+    <div class="dark-panel" style="color:#000;background:#fff">
+      {% for item in items %}<p><strong>{{ item.quantity }} × {{ item.product_name }}</strong> — {{ item.brand }}{% if item.discount_cents %} · Free deal item{% endif %}</p>{% endfor %}
+      <hr style="border:0;border-top:2px solid #FF6B00">
+      <p>Discount <strong>NZ${{ "%.2f"|format(transaction.discount_cents/100) }}</strong></p>
+      <p class="code">NZ${{ "%.2f"|format(transaction.amount_cents/100) }}</p>
+      {% if transaction.deal_type == 'date_night' %}<p>2-cup Date Night deal applied. Lowest priced drink is free.</p>{% endif %}
+    </div>
+    {% if voucher %}<div class="dark-panel" style="margin-top:18px;color:#000;background:#fff">
+      <h2>Your {{ 'friend cup voucher' if voucher.voucher_type=='friend' else '5-Day Pass' }}</h2>
+      {% if voucher.friend_name %}<p>For {{ voucher.friend_name }}</p>{% endif %}
+      <div class="code">{{ voucher.code }}</div>
+      <p>{{ voucher.redemptions_remaining }} of {{ voucher.redemptions_total }} redemptions left. Show this code at Noodle Box.</p>
+      <button class="no-print" onclick="window.print()">Print voucher</button>
+    </div>{% endif %}
+    {% if transaction.transaction_type == 'sale' %}
+    <div class="dark-panel" style="margin-top:18px;color:#000;background:#fff">
+      <h2>Buy a cup for a friend</h2><p>Add one cup to this order for a friend. Payment is simulated in Test Mode.</p>
+      <form method="post" action="/friend">
+        <input type="hidden" name="order_id" value="{{ transaction.order_code }}"><input type="hidden" name="location_code" value="{{ location }}">
+        <label for="friend">Friend's name</label><input id="friend" name="friend_name" maxlength="80" required>
+        <p>One cup at the lowest beta price will be added to this order. The friend code can be redeemed for one noodle cup.</p>
+        <button type="submit">Buy a friend cup · Test Mode</button>
+      </form>
+    </div>
+    {% endif %}
+    {% if transaction.transaction_type == 'redemption' %}<p class="pill">Redeemed · no payment due</p>{% endif %}
+    <p class="no-print"><a class="button dark" href="/?location={{ location }}">Back to POS</a> <a class="button" href="/redeem?location={{ location }}">Redeem another code</a></p>
+    <p class="print-only">Noodle Box NZ · University Beta Test</p>
+  </section>
+</main>
+{% endblock %}

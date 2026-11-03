@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Noodle Box feedback{% endblock %}
+{% block body %}
+<main class="receipt stack">
+  <section><h1>How was your cup?</h1><p>Quick feedback helps us stock the noodles you actually want.</p></section>
+  {% if thanks %}<div class="alert" role="status">Thanks — your feedback is in.</div>{% endif %}
+  {% if error %}<div class="alert" role="alert">{{ error }}</div>{% endif %}
+  <section class="card">
+    <form method="post" action="/feedback">
+      <input type="hidden" name="location_code" value="{{ location }}">
+      <label for="rating">Rating</label><select name="rating" id="rating" required><option value="">Choose 1 to 5</option>{% for value in range(5,0,-1) %}<option value="{{ value }}">{{ value }} / 5</option>{% endfor %}</select>
+      <label for="comment">What should we stock next?</label><textarea id="comment" name="comment" maxlength="1000" placeholder="Your noodle request or quick note"></textarea>
+      <button type="submit">Send feedback</button>
+    </form>
+  </section>
+</main>
+{% endblock %}

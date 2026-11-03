@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Noodle Box POS{% endblock %}
+{% block body %}
+<main class="stack">
+  <section>
+    <p class="pill">BETA POS · TEST MODE</p>
+    <h1>Quick cup. Good break.</h1>
+    <p>Choose a cup, take a simulated payment, and print the receipt code. Test Mode does not charge a card.</p>
+    {% if error %}<div class="alert" role="alert">{{ error }}</div>{% endif %}
+  </section>
+  <section class="card">
+    <h2>Sell a noodle cup</h2>
+    <form method="post" action="/checkout" id="checkout-form">
+      <div class="row"><div><label for="location">Location</label><select id="location" name="location_code">{% for code in locations %}<option value="{{ code }}" {% if code==location %}selected{% endif %}>{{ code }}</option>{% endfor %}</select></div><div><label>Payment</label><div class="pill">TEST MODE · simulated</div></div></div>
+      <div id="cart-rows">
+        <div class="row cart-row">
+          <div><label>Product</label><select name="product_ids" required>{% for product in noodles %}<option value="{{ product.id }}">{{ product.brand }} — {{ product.name }} · NZ${{ "%.2f"|format(product.price_cents/100) }}</option>{% endfor %}{% for product in drinks %}<option value="{{ product.id }}">Drink: {{ product.name }} · NZ${{ "%.2f"|format(product.price_cents/100) }}</option>{% endfor %}</select></div>
+          <div style="max-width:120px"><label>Qty</label><input name="quantities" type="number" min="1" max="20" value="1" required></div>
+        </div>
+        <div class="row cart-row">
+          <div><label>Product (optional)</label><select name="product_ids"><option value="" selected>— add drink or second cup —</option>{% for product in noodles %}<option value="{{ product.id }}">{{ product.brand }} — {{ product.name }} · NZ${{ "%.2f"|format(product.price_cents/100) }}</option>{% endfor %}{% for product in drinks %}<option value="{{ product.id }}">Drink: {{ product.name }} · NZ${{ "%.2f"|format(product.price_cents/100) }}</option>{% endfor %}</select></div>
+          <div style="max-width:120px"><label>Qty</label><input name="quantities" type="number" min="0" max="20" value="0"></div>
+        </div>
+      </div>
+      <p class="muted">Exactly 2 noodle cups plus a drink automatically makes the lowest priced drink free.</p>
+      <button type="button" class="button dark no-print" id="add-row">Add another item</button>
+      <button type="submit">Take test payment</button>
+    </form>
+  </section>
+  <section class="grid">
+    <article class="card">
+      <h2>5-Day Noodle Pass</h2>
+      <p>One simulated purchase gives five cup redemptions. The code stops working at zero.</p>
+      {% for pass in passes %}<form method="post" action="/pass"><input type="hidden" name="location_code" value="{{ location }}"><input type="hidden" name="product_id" value="{{ pass.id }}"><p><strong>NZ${{ "%.2f"|format(pass.price_cents/100) }}</strong> · {{ pass.stock }} in stock</p><button type="submit">Buy the pass · Test Mode</button></form>{% endfor %}
+    </article>
+    <article class="card">
+      <h2>Buy for a friend</h2>
+      <p>Make a sale first. Its receipt has a friend voucher purchase form.</p>
+      <a class="button dark" href="/redeem?location={{ location }}">Redeem a code</a>
+    </article>
+  </section>
+  <section class="dark-panel">
+    <h2>Beta catalogue</h2>
+    <p>Seed products and prices are placeholders. Admin can change stock, prices and availability.</p>
+    <div class="grid">{% for product in noodles %}<div class="metric"><b>{{ product.brand }}</b><div>{{ product.name }}</div><strong>NZ${{ "%.2f"|format(product.price_cents/100) }}</strong><div>{{ product.stock }} in stock</div></div>{% endfor %}</div>
+  </section>
+</main>
+<script>
+  (() => {
+    const container = document.getElementById('cart-rows');
+    document.getElementById('add-row').addEventListener('click', () => {
+      const row = container.querySelector('.cart-row').cloneNode(true);
+      row.querySelector('select').value = '';
+      row.querySelector('select').removeAttribute('required');
+      const quantity = row.querySelector('input'); quantity.value = '0'; quantity.min = '0'; quantity.removeAttribute('required');
+      container.appendChild(row);
+    });
+  })();
+</script>
+{% endblock %}

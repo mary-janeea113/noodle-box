@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Redeem a Noodle Box code{% endblock %}
+{% block body %}
+<main class="receipt stack">
+  <section><h1>Got a code?</h1><p>Redeem a friend cup voucher or one day from a 5-Day Pass.</p></section>
+  {% if error %}<div class="alert" role="alert">{{ error }}</div>{% endif %}
+  <section class="card">
+    <form method="post" action="/redeem">
+      <label for="code">Voucher or pass code</label><input id="code" name="code" placeholder="FRIEND-XXXXXX or PASS-XXXXXX" required autocomplete="off">
+      <label for="location">Location</label><select id="location" name="location_code">{% for code in locations %}<option value="{{ code }}" {% if code==location %}selected{% endif %}>{{ code }}</option>{% endfor %}</select>
+      <p>Redemption is free. A pass loses one redemption each time.</p><button type="submit">Redeem one cup</button>
+    </form>
+  </section>
+</main>
+{% endblock %}

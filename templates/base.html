@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Noodle Box{% endblock %}</title>
+  <style>
+    :root { color-scheme: light; --orange:#FF6B00; --black:#000000; --white:#FFFFFF; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--black); color:var(--white); font-family:Arial,Helvetica,sans-serif; }
+    a { color:var(--orange); }
+    header { border-bottom:3px solid var(--orange); padding:14px clamp(16px,4vw,48px); display:flex; gap:20px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+    .brand { display:flex; align-items:center; gap:10px; color:var(--orange); font-weight:900; letter-spacing:-.05em; font-size:22px; text-decoration:none; }
+    .brand svg { width:32px;height:36px; }
+    nav { display:flex; gap:18px; flex-wrap:wrap; }
+    nav a { color:var(--white); text-decoration:none; font-weight:700; }
+    nav a:hover, nav a:focus { color:var(--orange); }
+    main { width:min(1100px,calc(100% - 32px)); margin:28px auto 52px; }
+    h1,h2,h3 { line-height:1.05; letter-spacing:-.04em; }
+    h1 { color:var(--orange); font-size:clamp(30px,5vw,52px); margin:0 0 12px; }
+    h2 { color:var(--orange); margin:0 0 14px; font-size:24px; }
+    h3 { margin:0 0 10px; font-size:20px; }
+    p { line-height:1.45; }
+    .card { background:var(--white); color:var(--black); border:3px solid var(--orange); border-radius:14px; padding:20px; }
+    .card h2,.card h3 { color:var(--black); }
+    .grid { display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); }
+    .stack { display:grid; gap:18px; }
+    .muted { opacity:.8; }
+    .orange { color:var(--orange); }
+    label { display:block; font-weight:700; margin:10px 0 5px; }
+    input,select,textarea,button { font:inherit; }
+    input,select,textarea { width:100%; min-height:42px; border:2px solid var(--black); border-radius:8px; padding:8px 10px; color:var(--black); background:var(--white); }
+    textarea { min-height:96px; resize:vertical; }
+    button,.button { display:inline-block; border:0; border-radius:999px; background:var(--orange); color:var(--black); font-weight:900; padding:12px 18px; cursor:pointer; text-decoration:none; }
+    button:hover,.button:hover { background:var(--black); color:var(--orange); outline:2px solid var(--orange); }
+    .button.dark { background:var(--black); color:var(--white); }
+    .button.dark:hover { color:var(--orange); }
+    .row { display:flex; gap:10px; align-items:end; flex-wrap:wrap; }
+    .row > * { flex:1; min-width:120px; }
+    .pill { display:inline-block; border:2px solid var(--orange); border-radius:999px; padding:5px 10px; font-weight:800; }
+    .alert { border:2px solid var(--orange); background:var(--orange); color:var(--black); padding:12px 14px; border-radius:10px; font-weight:800; margin-bottom:16px; }
+    .dark-panel { border:2px solid var(--orange); border-radius:14px; padding:18px; overflow:auto; }
+    table { width:100%; border-collapse:collapse; min-width:600px; }
+    th,td { border-bottom:1px solid var(--orange); text-align:left; padding:10px 8px; vertical-align:top; }
+    th { color:var(--orange); }
+    .metric { border:2px solid var(--orange); border-radius:14px; padding:17px; }
+    .metric strong { display:block; font-size:30px; color:var(--orange); margin-top:8px; }
+    .receipt { max-width:620px; margin:auto; }
+    .code { font:900 29px/1.1 ui-monospace,monospace; letter-spacing:.04em; overflow-wrap:anywhere; color:var(--black); }
+    .print-only { display:none; }
+    @media(max-width:600px) { main { margin-top:20px; } header { align-items:flex-start; } nav { gap:12px; } .row { display:block; } }
+    @media print { body { background:white;color:black; } header,button,.no-print { display:none!important; } main { margin:0;width:100%; } .card { border-color:black; } .print-only { display:block; } }
+  </style>
+</head>
+<body>
+<header>
+  <a class="brand" href="/" aria-label="Noodle Box home">
+    <svg viewBox="0 0 64 72" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 25h32l-4 39H20l-4-39Z"/><path d="M12 22c0-4 40-4 40 0s-40 4-40 0Z"/><path d="M22 11c-5-5 5-6 0-11M32 13c-5-5 5-6 0-11M42 11c-5-5 5-6 0-11"/><path d="M24 36c3 4 5-4 8 0s5-4 8 0M25 46c3 4 5-4 8 0s5-4 8 0"/></svg>
+    <span>NOODLE BOX</span>
+  </a>
+  <nav aria-label="Main navigation"><a href="/">POS</a><a href="/redeem">Redeem</a><a href="/feedback">Feedback</a><a href="/poster">Poster</a><a href="/admin">Admin</a></nav>
+</header>
+{% block body %}{% endblock %}
+</body>
+</html>
